@@ -33,6 +33,15 @@ const DriversPage = ({ children }: Props) => {
             <p>Country: {driver.country} </p>
             <p>Code: {driver.code} </p>
             <p>Place: {driver.place} </p>
+            <button
+              onClick={async (e) => {
+                e.preventDefault();
+                await axiosInstance().post(`/drivers/${driver.id}/overtake`);
+                refetch();
+              }}
+            >
+              OVERTAKE
+            </button>
           </div>
         ))}
       </div>
