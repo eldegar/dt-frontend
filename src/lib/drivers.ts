@@ -11,3 +11,13 @@ export async function driverOvertake(
 ): Promise<AxiosResponse<Driver[]>> {
   return axiosInstance().post(`/drivers/${id}/overtake`);
 }
+
+export async function driverMultipleOvertake(
+  fromDriverIndex: number,
+  toDriverIndex: number
+): Promise<AxiosResponse<Driver[]>> {
+  return axiosInstance().post(`/drivers/multi-overtake`, {
+    fromDriverIndex,
+    toDriverIndex,
+  });
+}
