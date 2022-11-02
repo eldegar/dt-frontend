@@ -7,7 +7,7 @@ export const axiosInstance = (): AxiosInstance => {
   };
 
   const instance = axios.create({
-    baseURL: import.meta.env.VITE_API,
+    baseURL: `${import.meta.env.VITE_API}/api`,
     headers,
     params: { cache: Date.now() },
   });
