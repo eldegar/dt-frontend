@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
+import Button from "../../components/button";
+import DriverCard from "../../components/driver-card";
 import { getDrivers } from "../../lib/drivers";
 import { axiosInstance } from "../../lib/xhr";
+import { FaCaretUp } from "react-icons/fa";
 
 type Props = {
   children?: ReactNode;
@@ -15,33 +18,42 @@ const DriversPage = ({ children }: Props) => {
       staleTime: 1000 * 60 * 20,
     }
   );
+
+  const handleOvertake = async (e: React.MouseEvent, driverId: number) => {
+    e.preventDefault();
+    await axiosInstance().post(`/drivers/${driverId}/overtake`);
+    refetch();
+  };
+
   if (isLoading) {
-    return <div>Loading..</div>;
+    return (
+      <div className="text-center flex items-center justify-center w-full h-screen">
+        <span className="text-4xl">Loading..</span>
+      </div>
+    );
   }
+
   return (
     <>
-      <h1>Drivers</h1>
-      <div>
+      <h1 className="container text-8xl mb-16 text-center">Drivers</h1>
+      <div className="container">
         {data?.data.map((driver) => (
-          <div key={driver.id}>
-            <img
-              width={200}
-              src={`${import.meta.env.VITE_API}${driver.imgUrl}`}
-            ></img>
-            <p>First Name: {driver.firstname}</p>
-            <p>Last Name: {driver.lastname}</p>
-            <p>Country: {driver.country} </p>
-            <p>Code: {driver.code} </p>
-            <p>Place: {driver.place} </p>
-            <button
-              onClick={async (e) => {
-                e.preventDefault();
-                await axiosInstance().post(`/drivers/${driver.id}/overtake`);
-                refetch();
-              }}
-            >
-              OVERTAKE
-            </button>
+          <div
+            className="mb-8 flex justify-center items-center"
+            key={driver.id}
+          >
+            <div>
+              <DriverCard {...driver}></DriverCard>
+              {driver.place > 1 && (
+                <Button
+                  iconAfterLabel
+                  icon={() => <FaCaretUp className="text-xl"></FaCaretUp>}
+                  className="mt-2"
+                  onClick={(e) => handleOvertake(e, driver.id)}
+                  label="Overtake"
+                ></Button>
+              )}
+            </div>
           </div>
         ))}
       </div>
