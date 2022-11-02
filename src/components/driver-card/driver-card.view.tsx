@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-import { axiosInstance } from "../../lib/xhr";
 import { Driver } from "../../types/driver";
 
 interface Props extends Driver {}
